@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>AI Translator</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- TOP HALF: SPEAKER 2 (upside down for mobile)                 -->
+    <!-- ============================================================ -->
+    <div id="speaker2" class="speaker-half top-half">
+
+        <div class="rotation-wrapper">
+
+            <!-- Language Dropdown -->
+            <div class="language-section">
+                <select id="lang2" class="language-select">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="ja">Japanese</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ko">Korean</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="it">Italian</option>
+                    <option value="ru">Russian</option>
+                    <option value="ar">Arabic</option>
+                    <option value="hi">Hindi</option>
+                </select>
+            </div>
+
+            <!-- Translation Display (big, centered) -->
+            <div id="translation2" class="translation-display">
+                <span id="translationText2" class="translation-text">Tap 🔴 to speak</span>
+            </div>
+
+            <!-- Spacer to push button down -->
+            <div class="spacer"></div>
+
+            <!-- Speak Button (big red circle) -->
+            <button id="speakBtn2" class="speak-btn">
+                <span class="btn-circle"></span>
+            </button>
+
+            <!-- Status Indicator -->
+            <div id="status2" class="status-indicator status-ready">
+                <span class="status-dot"></span>
+            </div>
+
+            <!-- Keyboard hint (desktop only) -->
+            <div class="keyboard-hint">Press <kbd>Q</kbd> to speak</div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- DIVIDER                                                       -->
+    <!-- ============================================================ -->
+    <div class="divider"></div>
+
+    <!-- ============================================================ -->
+    <!-- BOTTOM HALF: SPEAKER 1                                       -->
+    <!-- ============================================================ -->
+    <div id="speaker1" class="speaker-half bottom-half">
+
+        <!-- Language Dropdown -->
+        <div class="language-section">
+            <select id="lang1" class="language-select">
+                <option value="en" selected>English</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="ja">Japanese</option>
+                <option value="zh">Chinese</option>
+                <option value="ko">Korean</option>
+                <option value="pt">Portuguese</option>
+                <option value="it">Italian</option>
+                <option value="ru">Russian</option>
+                <option value="ar">Arabic</option>
+                <option value="hi">Hindi</option>
+            </select>
+        </div>
+
+        <!-- Translation Display (big, centered) -->
+        <div id="translation1" class="translation-display">
+            <span id="translationText1" class="translation-text">Tap 🔴 to speak</span>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Speak Button (big red circle) -->
+        <button id="speakBtn1" class="speak-btn">
+            <span class="btn-circle"></span>
+        </button>
+
+        <!-- Status Indicator -->
+        <div id="status1" class="status-indicator status-ready">
+            <span class="status-dot"></span>
+        </div>
+
+        <!-- Keyboard hint (desktop only) -->
+        <div class="keyboard-hint">Press <kbd>P</kbd> to speak</div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

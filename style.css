@@ -1,0 +1,428 @@
+/* ================================================================ */
+/* RESET & BASE                                                     */
+/* ================================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a0f;
+    color: #e0e0e0;
+    overflow: hidden;
+}
+
+/* ================================================================ */
+/* SPLIT SCREEN LAYOUT                                              */
+/* ================================================================ */
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.speaker-half {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 20px 20px 20px;
+    overflow: hidden;
+    min-height: 0;
+    position: relative;
+}
+
+/* --- Rotation Wrapper (for mobile top half) --- */
+.rotation-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+/* ================================================================ */
+/* TOP HALF (Speaker 2) - Red/Orange theme                          */
+/* ================================================================ */
+.top-half {
+    background: linear-gradient(145deg, #1a0e0e 0%, #0f0a0a 100%);
+    border-bottom: 2px solid #ff4444;
+}
+
+/* ================================================================ */
+/* BOTTOM HALF (Speaker 1) - Blue theme                            */
+/* ================================================================ */
+.bottom-half {
+    background: linear-gradient(145deg, #0e1420 0%, #0a0e1a 100%);
+    border-top: 2px solid #4488ff;
+}
+
+/* ================================================================ */
+/* DIVIDER                                                         */
+/* ================================================================ */
+.divider {
+    height: 3px;
+    background: linear-gradient(90deg, #ff4444, #ff8800, #44ff88, #4488ff);
+    flex-shrink: 0;
+    z-index: 10;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* ================================================================ */
+/* LANGUAGE SECTION (small, minimal)                                */
+/* ================================================================ */
+.language-section {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+}
+
+.language-select {
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: #e0e0e0;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s;
+    max-width: 100px;
+}
+
+.language-select:focus {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.language-select option {
+    background: #1a1a24;
+    color: #e0e0e0;
+}
+
+/* ================================================================ */
+/* TRANSLATION DISPLAY (big, centered)                             */
+/* ================================================================ */
+.translation-display {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    min-height: 60px;
+}
+
+.translation-text {
+    font-size: 24px;
+    font-weight: 500;
+    color: #ffffff;
+    text-align: center;
+    word-break: break-word;
+    line-height: 1.4;
+    transition: color 0.3s;
+}
+
+/* Dim text when idle */
+.translation-text.idle {
+    color: #555;
+    font-weight: 300;
+}
+
+/* Listening state */
+.translation-text.listening {
+    color: #ff6666;
+    animation: pulse-text 0.8s ease-in-out infinite;
+}
+
+/* Translating state */
+.translation-text.translating {
+    color: #ffaa00;
+    animation: pulse-text 0.6s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}
+
+/* ================================================================ */
+/* SPACER                                                          */
+/* ================================================================ */
+.spacer {
+    flex: 1;
+    min-height: 10px;
+}
+
+/* ================================================================ */
+/* SPEAK BUTTON (big red circle)                                    */
+/* ================================================================ */
+.speak-btn {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    align-self: center;
+    margin: 8px 0;
+    transition: transform 0.15s ease;
+    position: relative;
+}
+
+.speak-btn .btn-circle {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ff6666, #cc0000);
+    box-shadow: 0 4px 30px rgba(255, 0, 0, 0.3),
+                inset 0 -4px 10px rgba(0, 0, 0, 0.3),
+                inset 0 4px 10px rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+}
+
+/* Button press effect */
+.speak-btn:active .btn-circle {
+    transform: scale(0.90);
+    box-shadow: 0 2px 15px rgba(255, 0, 0, 0.5),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.4);
+}
+
+/* Disabled state */
+.speak-btn:disabled {
+    pointer-events: none;
+}
+
+.speak-btn:disabled .btn-circle {
+    background: #444;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Listening state (pulsing glow) */
+.speak-btn.listening .btn-circle {
+    animation: pulse-circle 0.8s ease-in-out infinite;
+    box-shadow: 0 0 50px rgba(255, 0, 0, 0.6),
+                inset 0 -4px 10px rgba(0, 0, 0, 0.3),
+                inset 0 4px 10px rgba(255, 255, 255, 0.2);
+}
+
+@keyframes pulse-circle {
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 50px rgba(255, 0, 0, 0.6);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 80px rgba(255, 0, 0, 0.8);
+    }
+}
+
+/* Translating state (yellow glow) */
+.speak-btn.translating .btn-circle {
+    animation: pulse-circle-yellow 0.6s ease-in-out infinite;
+    background: radial-gradient(circle at 30% 30%, #ffcc44, #cc8800);
+    box-shadow: 0 0 50px rgba(255, 170, 0, 0.5);
+}
+
+@keyframes pulse-circle-yellow {
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 50px rgba(255, 170, 0, 0.5);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 80px rgba(255, 170, 0, 0.7);
+    }
+}
+
+/* ================================================================ */
+/* STATUS INDICATOR (tiny dot)                                     */
+/* ================================================================ */
+.status-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 4px 0;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.status-ready .status-dot {
+    background: #44ff88;
+    box-shadow: 0 0 8px rgba(68, 255, 136, 0.3);
+}
+
+.status-listening .status-dot {
+    background: #ff4444;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.5);
+    animation: pulse-dot 0.8s ease-in-out infinite;
+}
+
+.status-translating .status-dot {
+    background: #ffaa00;
+    box-shadow: 0 0 12px rgba(255, 170, 0, 0.4);
+    animation: pulse-dot 0.6s ease-in-out infinite;
+}
+
+.status-disabled .status-dot {
+    background: #555;
+    box-shadow: none;
+}
+
+@keyframes pulse-dot {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.8);
+        opacity: 0.4;
+    }
+}
+
+/* ================================================================ */
+/* MOBILE ROTATION: Top half upside down                          */
+/* ================================================================ */
+@media (max-width: 1023px) {
+    /* Rotate the wrapper */
+    .top-half .rotation-wrapper {
+        transform: rotate(180deg);
+    }
+
+    /* Flip EVERY child back */
+    .top-half .rotation-wrapper *,
+    .top-half .rotation-wrapper .language-select,
+    .top-half .rotation-wrapper .translation-text,
+    .top-half .rotation-wrapper .speak-btn,
+    .top-half .rotation-wrapper .speak-btn *,
+    .top-half .rotation-wrapper .status-indicator,
+    .top-half .rotation-wrapper .status-dot {
+        transform: rotate(180deg) !important;
+    }
+
+    /* Fix select dropdown options */
+    .top-half .rotation-wrapper select option {
+        transform: rotate(180deg) !important;
+    }
+}
+
+/* ================================================================ */
+/* DESKTOP: Left/Right split                                      */
+/* ================================================================ */
+@media (min-width: 1024px) {
+    body {
+        flex-direction: row !important;
+    }
+
+    .speaker-half {
+        flex: 1;
+        padding: 24px 32px 32px 32px;
+        min-height: 0;
+    }
+
+    .top-half {
+        border-bottom: none;
+        border-right: 2px solid #ff4444;
+    }
+
+    .top-half .rotation-wrapper {
+        transform: none !important;
+    }
+
+    .top-half .rotation-wrapper * {
+        transform: none !important;
+    }
+
+    .bottom-half {
+        border-top: none;
+        border-left: 2px solid #4488ff;
+    }
+
+    .divider {
+        width: 3px;
+        height: auto;
+        background: linear-gradient(180deg, #ff4444, #ff8800, #44ff88, #4488ff);
+    }
+
+    .speak-btn {
+        width: 120px;
+        height: 120px;
+    }
+
+    .translation-text {
+        font-size: 32px;
+    }
+}
+
+/* ================================================================ */
+/* KEYBOARD SHORTCUT HINT (desktop only)                           */
+/* ================================================================ */
+.keyboard-hint {
+    display: none;
+    font-size: 11px;
+    color: #666;
+    text-align: center;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+}
+
+@media (min-width: 1024px) {
+    .keyboard-hint {
+        display: block;
+    }
+}
+
+/* ================================================================ */
+/* KEYBOARD HINT (desktop only)                                     */
+/* ================================================================ */
+.keyboard-hint {
+    display: none;
+    font-size: 11px;
+    color: #555;
+    text-align: center;
+    margin-top: 6px;
+    letter-spacing: 0.3px;
+    font-weight: 400;
+}
+
+.keyboard-hint kbd {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #888;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    font-family: inherit;
+}
+
+/* Show on desktop only */
+@media (min-width: 1024px) {
+    .keyboard-hint {
+        display: block;
+    }
+}
