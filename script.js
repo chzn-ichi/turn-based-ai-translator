@@ -2,7 +2,42 @@
 // AI TRANSLATOR — script.js
 // Replace with your actual Groq API key (starts with gsk_)
 // ================================================================
-const GROQ_API_KEY = '';
+const GROQ_API_KEY = 'api key here';
+
+// ----- UI Text Constants -----
+const PLACEHOLDER_TEXT = 'Press mic to speak';
+const LISTENING_TEXT = 'Listening...';
+const TRANSLATING_TEXT = 'Translating...';
+
+// ----- LANGUAGE FLAGS - Local Images -----
+const LANGUAGE_FLAGS = {
+    'en': 'images/flags/us.png',
+    'es': 'images/flags/es.png',
+    'fr': 'images/flags/fr.png',
+    'de': 'images/flags/de.png',
+    'ja': 'images/flags/jp.png',
+    'zh': 'images/flags/cn.png',
+    'ko': 'images/flags/kr.png',
+    'pt': 'images/flags/pt.png',
+    'it': 'images/flags/it.png',
+    'ru': 'images/flags/ru.png',
+    'ar': 'images/flags/sa.png',
+    'hi': 'images/flags/in.png',
+    'fil': 'images/flags/ph.png',  // ← Add Filipino
+    'ceb': 'images/flags/ph.png'   // ← Add Cebuano (same flag)
+};
+
+function updateFlag(speaker, langCode) {
+    const flagPath = LANGUAGE_FLAGS[langCode] || 'images/flags/us.png';
+    const flagId = speaker === 1 ? 'flag1' : 'flag2';
+    const flagImg = document.getElementById(flagId);
+    if (flagImg) {
+        flagImg.src = flagPath;
+        const langName = document.getElementById(speaker === 1 ? 'lang1' : 'lang2');
+        const selectedOption = langName.options[langName.selectedIndex];
+        flagImg.alt = selectedOption ? selectedOption.text : '';
+    }
+}
 
 // ================================================================
 // DOM REFERENCES
@@ -18,8 +53,6 @@ const lang2        = document.getElementById('lang2');
 
 // ================================================================
 // STATE MACHINE
-// States: 'idle' | 'speaker1_speaking' | 'speaker1_translating'
-//       | 'speaker2_speaking' | 'speaker2_translating'
 // ================================================================
 let appState = 'idle';
 
@@ -80,26 +113,30 @@ function setStatus(speaker, state) {
     const btn      = speaker === 1 ? speakBtn1 : speakBtn2;
 
     statusEl.className = 'status-indicator';
-    btn.className = 'speak-btn';
+    btn.className = 'mic-btn';
 
     switch (state) {
         case 'ready':
             statusEl.classList.add('status-ready');
             btn.disabled = false;
+            setMicIcon(speaker, false);
             break;
         case 'listening':
             statusEl.classList.add('status-listening');
             btn.classList.add('listening');
             btn.disabled = false;
+            setMicIcon(speaker, 'listening');
             break;
         case 'translating':
             statusEl.classList.add('status-translating');
             btn.classList.add('translating');
             btn.disabled = true;
+            setMicIcon(speaker, false);
             break;
         case 'disabled':
             statusEl.classList.add('status-disabled');
             btn.disabled = true;
+            setMicIcon(speaker, true);
             break;
     }
 }
@@ -117,11 +154,72 @@ function setDisplayText(speaker, text, style = 'normal') {
         case 'interim':     textEl.style.color = '#ffcc44';      break;
         case 'final-own':   textEl.style.color = '#88ff88';      break;
         case 'error':       textEl.style.color = '#ff4444';      break;
+        case 'translated':  textEl.style.color = '#333333';      break;
+        case 'empty-text':  textEl.classList.add('empty-text');  break;
     }
 
     textEl.textContent = text;
+
+    if (style === 'translated' || style === 'final-own') {
+        setTranslationCardState(speaker, false);
+    }
 }
 
+function setTranslationCardState(speaker, isEmpty) {
+    const card = speaker === 1
+        ? document.getElementById('translation1')
+        : document.getElementById('translation2');
+    const textEl = speaker === 1 ? translationText1 : translationText2;
+
+    if (isEmpty) {
+        card.classList.add('empty');
+        textEl.classList.add('empty-text');
+        textEl.textContent = '...';
+        textEl.style.color = '#999999';
+        textEl.style.fontStyle = 'italic';
+    } else {
+        card.classList.remove('empty');
+        textEl.classList.remove('empty-text');
+        textEl.style.fontStyle = '';
+    }
+}
+
+// MICROPHONE ICON SWAPPER
+const MIC_ACTIVE = 'images/mic-active.png';
+const MIC_LISTENING = 'images/mic-listening.png';
+const MIC_DISABLED = 'images/mic-disabled.png';
+
+function setMicIcon(speaker, state) {
+    const iconId = speaker === 1 ? 'micIcon1' : 'micIcon2';
+    const icon = document.getElementById(iconId);
+    if (!icon) return;
+
+    // Also check if the button is disabled
+    const btn = speaker === 1 ? speakBtn1 : speakBtn2;
+
+    if (btn.disabled) {
+        icon.src = MIC_DISABLED;
+        return;
+    }
+
+    switch (state) {
+        case 'idle':
+        case 'ready':
+            icon.src = MIC_ACTIVE;
+            break;
+        case 'listening':
+            icon.src = MIC_LISTENING;
+            break;
+        case 'translating':
+            icon.src = MIC_ACTIVE;
+            break;
+        case 'disabled':
+            icon.src = MIC_DISABLED;
+            break;
+        default:
+            icon.src = MIC_ACTIVE;
+    }
+}
 // ================================================================
 // SPEECH RECOGNITION
 // ================================================================
@@ -145,6 +243,9 @@ function startListening(speaker) {
 
     console.log(`[SR] Starting for Speaker ${speaker}`);
 
+    const otherSpeaker = speaker === 1 ? 2 : 1;
+    setTranslationCardState(otherSpeaker, true);
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
 
@@ -164,7 +265,7 @@ function startListening(speaker) {
     }
 
     setState(speaker === 1 ? 'speaker1_speaking' : 'speaker2_speaking');
-    setDisplayText(speaker, 'Listening...', 'listening');
+    setDisplayText(speaker, LISTENING_TEXT, 'listening');
 
     recognition.onresult = (event) => {
         let interimText = '';
@@ -202,8 +303,10 @@ function startListening(speaker) {
         setDisplayText(speaker, msg, 'error');
 
         setTimeout(() => {
-            setDisplayText(speaker, 'Tap 🔴 to speak', 'idle');
-            setDisplayText(speaker === 1 ? 2 : 1, 'Tap 🔴 to speak', 'idle');
+            setDisplayText(speaker, PLACEHOLDER_TEXT, 'idle');
+            const otherSpeaker = speaker === 1 ? 2 : 1;
+            setTranslationCardState(otherSpeaker, false);
+            setDisplayText(otherSpeaker, PLACEHOLDER_TEXT, 'idle');
             setState('idle');
         }, 2500);
     };
@@ -226,7 +329,10 @@ function startListening(speaker) {
         } else {
             setDisplayText(speaker, 'No speech detected', 'error');
             setTimeout(() => {
-                setDisplayText(speaker, 'Tap 🔴 to speak', 'idle');
+                setDisplayText(speaker, PLACEHOLDER_TEXT, 'idle');
+                const otherSpeaker = speaker === 1 ? 2 : 1;
+                setTranslationCardState(otherSpeaker, false);
+                setDisplayText(otherSpeaker, PLACEHOLDER_TEXT, 'idle');
                 setState('idle');
             }, 1500);
         }
@@ -261,26 +367,35 @@ function stopListening(speaker) {
 }
 
 // ================================================================
-// TRANSLATION — GEMINI API
+// TRANSLATION — GROQ API
 // ================================================================
 async function translateWithGemini(text, sourceLang, targetLang, speaker) {
     const targetSpeaker = speaker === 1 ? 2 : 1;
 
-    setDisplayText(targetSpeaker, 'Translating...', 'translating');
+    setDisplayText(targetSpeaker, TRANSLATING_TEXT, 'translating');
 
     const historyContext = getHistoryContext();
     const contextBlock = historyContext
-        ? `Context from recent conversation:\n${historyContext}\n\n`
+        ? `Previous conversation context (for reference only):\n${historyContext}\n\n`
         : '';
 
-    const prompt = `You are a professional interpreter. Translate the following text from ${sourceLang} to ${targetLang}.
+    const prompt = `You are a professional interpreter.
 
-IMPORTANT: Make the translation sound natural, conversational, and culturally appropriate. Do NOT translate word-for-word. Use idioms and expressions that a native speaker would actually use.
+Translate the following text from ${sourceLang} to ${targetLang}.
 
-${contextBlock}New text to translate:
-"${text}"
+Requirements:
+- Preserve the original meaning, intent, and tone.
+- Produce a natural, fluent translation that sounds like a native speaker.
+- Adapt idioms, expressions, and cultural references when appropriate instead of translating them literally.
+- Do not add, remove, or explain information.
+- Preserve names, numbers, URLs, email addresses, and technical terms unless they should naturally be translated.
+- Keep the same level of formality as the original.
+- If the input is incomplete or contains speech disfluencies, translate it as naturally as possible without inventing missing content.
 
-Return ONLY the translated text. No explanations, no quotes, no preamble — just the translation.`;
+${contextBlock}Text:
+${text}
+
+Return only the translated text.`;
 
     try {
         const response = await fetch(
@@ -307,7 +422,7 @@ Return ONLY the translated text. No explanations, no quotes, no preamble — jus
 
         if (!response.ok) {
             const errData = await response.json().catch(() => ({}));
-            throw new Error(`API ${response.status}: ${errData?.error?.message || response.statusText}`);
+            throw new Error(`Groq API ${response.status}: ${errData?.error?.message || response.statusText}`);
         }
 
         const data = await response.json();
@@ -321,18 +436,23 @@ Return ONLY the translated text. No explanations, no quotes, no preamble — jus
 
         addToHistory(speaker, text, translation);
         displayTranslation(translation, targetSpeaker);
+        setDisplayText(speaker, PLACEHOLDER_TEXT, 'idle');
         setState('idle');
 
     } catch (err) {
         console.error('[Groq] Translation failed:', err);
         setDisplayText(targetSpeaker, 'Translation failed. Tap to retry.', 'error');
-        setDisplayText(speaker, 'Tap 🔴 to speak', 'idle');
+        setDisplayText(speaker, PLACEHOLDER_TEXT, 'idle');
         setState('idle');
     }
 }
 
 function displayTranslation(translation, targetSpeaker) {
     setDisplayText(targetSpeaker, translation, 'translated');
+    setTranslationCardState(targetSpeaker, false);
+    
+    const speaker = targetSpeaker === 1 ? 2 : 1;
+    setDisplayText(speaker, PLACEHOLDER_TEXT, 'idle');
 }
 
 // ================================================================
@@ -387,36 +507,36 @@ setupButton(speakBtn1, 1);
 setupButton(speakBtn2, 2);
 
 // ================================================================
-// KEYBOARD SHORTCUTS — P = Speaker 1, Q = Speaker 2
+// KEYBOARD SHORTCUTS — Q = Speaker 1, P = Speaker 2
 // ================================================================
-let keyPressed_P = false;
 let keyPressed_Q = false;
+let keyPressed_P = false;
 
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'p' || e.key === 'P') {
-        if (keyPressed_P || appState !== 'idle') return;
-        keyPressed_P = true;
-        e.preventDefault();
-        console.log('[Keys] P down → Speaker 1');
-        startListening(1);
-    }
     if (e.key === 'q' || e.key === 'Q') {
         if (keyPressed_Q || appState !== 'idle') return;
         keyPressed_Q = true;
         e.preventDefault();
-        console.log('[Keys] Q down → Speaker 2');
+        console.log('[Keys] Q down → Speaker 1');
+        startListening(1);
+    }
+    if (e.key === 'p' || e.key === 'P') {
+        if (keyPressed_P || appState !== 'idle') return;
+        keyPressed_P = true;
+        e.preventDefault();
+        console.log('[Keys] P down → Speaker 2');
         startListening(2);
     }
 });
 
 document.addEventListener('keyup', (e) => {
-    if (e.key === 'p' || e.key === 'P') {
-        keyPressed_P = false;
+    if (e.key === 'q' || e.key === 'Q') {
+        keyPressed_Q = false;
         e.preventDefault();
         if (appState === 'speaker1_speaking') stopListening(1);
     }
-    if (e.key === 'q' || e.key === 'Q') {
-        keyPressed_Q = false;
+    if (e.key === 'p' || e.key === 'P') {
+        keyPressed_P = false;
         e.preventDefault();
         if (appState === 'speaker2_speaking') stopListening(2);
     }
@@ -427,22 +547,92 @@ document.addEventListener('keyup', (e) => {
 // ================================================================
 lang1.addEventListener('change', () => {
     console.log(`[Lang] Speaker 1 → ${lang1.value}`);
+    updateFlag(1, lang1.value);
     conversationHistory.length = 0;
-    if (appState === 'idle') setDisplayText(1, 'Tap 🔴 to speak', 'idle');
+    if (appState === 'idle') setDisplayText(1, PLACEHOLDER_TEXT, 'idle');
 });
 
 lang2.addEventListener('change', () => {
     console.log(`[Lang] Speaker 2 → ${lang2.value}`);
+    updateFlag(2, lang2.value);
     conversationHistory.length = 0;
-    if (appState === 'idle') setDisplayText(2, 'Tap 🔴 to speak', 'idle');
+    if (appState === 'idle') setDisplayText(2, PLACEHOLDER_TEXT, 'idle');
 });
 
 // ================================================================
 // INIT
 // ================================================================
 setState('idle');
-setDisplayText(1, 'Tap 🔴 to speak', 'idle');
-setDisplayText(2, 'Tap 🔴 to speak', 'idle');
+setDisplayText(1, PLACEHOLDER_TEXT, 'idle');
+setDisplayText(2, PLACEHOLDER_TEXT, 'idle');
+updateFlag(1, lang1.value);
+updateFlag(2, lang2.value);
 
 console.log('[Init] AI Translator ready');
 console.log(`[Init] API key: ${GROQ_API_KEY ? 'set' : 'MISSING'}`);
+
+
+// ================================================================
+// CUSTOM DROPDOWN
+// ================================================================
+function initDropdown(dropdownId, buttonId, menuId, langSelectId) {
+    const dropdown = document.getElementById(dropdownId);
+    const button = document.getElementById(buttonId);
+    const menu = document.getElementById(menuId);
+    const langSelect = document.getElementById(langSelectId);
+
+    // Toggle dropdown
+    button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = menu.classList.toggle('open');
+        button.querySelector('.arrow').classList.toggle('open', isOpen);
+    });
+
+    // Select option
+    menu.addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li) return;
+
+        const value = li.dataset.value;
+        const flag = li.dataset.flag;
+        const text = li.textContent.trim();
+
+        // Update button
+        const flagImg = button.querySelector('.flag-image');
+        const textSpan = button.querySelector('.selected-text');
+        flagImg.src = flag;
+        flagImg.alt = text;
+        textSpan.textContent = text;
+
+        // Update hidden select
+        langSelect.value = value;
+
+        // Update active state
+        menu.querySelectorAll('li').forEach(item => item.classList.remove('active'));
+        li.classList.add('active');
+
+        // Close dropdown
+        menu.classList.remove('open');
+        button.querySelector('.arrow').classList.remove('open');
+
+        // Trigger change event
+        const event = new Event('change');
+        langSelect.dispatchEvent(event);
+
+        // Update flag if needed
+        if (typeof updateFlag === 'function') {
+            const speaker = langSelectId === 'lang1' ? 1 : 2;
+            updateFlag(speaker, value);
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+        menu.classList.remove('open');
+        button.querySelector('.arrow').classList.remove('open');
+    });
+}
+
+// Initialize custom dropdowns
+initDropdown('dropdown1', 'dropdownBtn1', 'dropdownMenu1', 'lang1');
+initDropdown('dropdown2', 'dropdownBtn2', 'dropdownMenu2', 'lang2');

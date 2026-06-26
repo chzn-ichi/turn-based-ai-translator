@@ -7,12 +7,11 @@
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #0a0a0f;
-    color: #e0e0e0;
+    background: #f8f8f8;
+    color: #333333;
     overflow: hidden;
 }
 
@@ -21,119 +20,138 @@ body {
 /* ================================================================ */
 body {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .speaker-half {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 16px 20px 20px 20px;
-    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px;
     min-height: 0;
-    position: relative;
-}
-
-/* --- Rotation Wrapper (for mobile top half) --- */
-.rotation-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-}
-
-/* ================================================================ */
-/* TOP HALF (Speaker 2) - Red/Orange theme                          */
-/* ================================================================ */
-.top-half {
-    background: linear-gradient(145deg, #1a0e0e 0%, #0f0a0a 100%);
-    border-bottom: 2px solid #ff4444;
-}
-
-/* ================================================================ */
-/* BOTTOM HALF (Speaker 1) - Blue theme                            */
-/* ================================================================ */
-.bottom-half {
-    background: linear-gradient(145deg, #0e1420 0%, #0a0e1a 100%);
-    border-top: 2px solid #4488ff;
+    background: #f8f8f8;
 }
 
 /* ================================================================ */
 /* DIVIDER                                                         */
 /* ================================================================ */
 .divider {
-    height: 3px;
-    background: linear-gradient(90deg, #ff4444, #ff8800, #44ff88, #4488ff);
+    width: 2px;
+    height: 100vh;
+    background: #333333;
     flex-shrink: 0;
     z-index: 10;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 /* ================================================================ */
-/* LANGUAGE SECTION (small, minimal)                                */
+/* LANGUAGE SELECTOR (Pill-shaped)                                  */
 /* ================================================================ */
 .language-section {
-    display: flex;
-    justify-content: center;
     flex-shrink: 0;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
 }
 
-.language-select {
-    padding: 4px 8px;
-    font-size: 12px;
-    font-weight: 500;
-    border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
-    color: #e0e0e0;
-    appearance: none;
-    cursor: pointer;
-    outline: none;
-    transition: border-color 0.3s;
-    max-width: 100px;
-}
-
-.language-select:focus {
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-.language-select option {
-    background: #1a1a24;
-    color: #e0e0e0;
-}
-
-/* ================================================================ */
-/* TRANSLATION DISPLAY (big, centered)                             */
-/* ================================================================ */
-.translation-display {
-    flex: 1;
+.language-pill {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 10px;
-    min-height: 60px;
+    gap: 6px;
+    background: #333333;
+    padding: 6px 12px 6px 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    user-select: none;
+    min-width: 200px;
+    min-height: 40px;
+}
+
+.language-pill .flag {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.language-pill .language-select {
+    background: transparent;
+    border: none;
+    color: #fafafa;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    padding: 2px 0;
+    appearance: none;
+    -webkit-appearance: none;
+    min-width: 100px;
+    width: 100%;
+}
+
+.language-pill .language-select option {
+    background: #333333;
+    color: #fafafa;
+}
+
+.language-pill .arrow {
+    color: #fafafa;
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+
+/* ================================================================ */
+/* FLAG IMAGES                                                      */
+/* ================================================================ */
+.flag-image {
+    width: 20px;
+    height: 15px;
+    object-fit: cover;
+    border-radius: 2px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+/* ================================================================ */
+/* TRANSLATION CARD (Rounded gray)                                 */
+/* ================================================================ */
+.translation-card {
+    flex: 1;
+    width: 100%;
+    max-width: 350px;
+    background: #dadada;
+    border-radius: 54px;
+    padding: 20px 29px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 120px;
+    margin-bottom: 16px;
+    transition: background 0.3s ease;
 }
 
 .translation-text {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 500;
-    color: #ffffff;
-    text-align: center;
+    color: #333333;
+    text-align: left;
     word-break: break-word;
     line-height: 1.4;
-    transition: color 0.3s;
+    transition: all 0.3s ease;
 }
 
-/* Dim text when idle */
-.translation-text.idle {
-    color: #555;
+/* Empty state (when speaker is speaking) */
+.translation-card.empty {
+    background: #e8e8e8;
+}
+
+.translation-text.empty-text {
+    color: #999999;
+    font-style: italic;
     font-weight: 300;
+    font-size: 16px;
 }
 
 /* Listening state */
 .translation-text.listening {
-    color: #ff6666;
+    color: #e0584d;
     animation: pulse-text 0.8s ease-in-out infinite;
 }
 
@@ -144,114 +162,96 @@ body {
 }
 
 @keyframes pulse-text {
-    0%,
-    100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.4;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
 }
 
 /* ================================================================ */
-/* SPACER                                                          */
+/* MICROPHONE BUTTON                                               */
 /* ================================================================ */
-.spacer {
-    flex: 1;
-    min-height: 10px;
-}
-
-/* ================================================================ */
-/* SPEAK BUTTON (big red circle)                                    */
-/* ================================================================ */
-.speak-btn {
-    width: 90px;
-    height: 90px;
+.mic-btn {
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     border: none;
-    background: transparent;
+    background: #333333;
     cursor: pointer;
-    padding: 0;
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
-    align-self: center;
-    margin: 8px 0;
-    transition: transform 0.15s ease;
-    position: relative;
-}
-
-.speak-btn .btn-circle {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #ff6666, #cc0000);
-    box-shadow: 0 4px 30px rgba(255, 0, 0, 0.3),
-                inset 0 -4px 10px rgba(0, 0, 0, 0.3),
-                inset 0 4px 10px rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
     transition: all 0.2s ease;
+    flex-shrink: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
-/* Button press effect */
-.speak-btn:active .btn-circle {
-    transform: scale(0.90);
-    box-shadow: 0 2px 15px rgba(255, 0, 0, 0.5),
-                inset 0 -2px 5px rgba(0, 0, 0, 0.4);
+.mic-icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    display: block;
+    transition: all 0.3s ease;
 }
 
-/* Disabled state */
-.speak-btn:disabled {
-    pointer-events: none;
+/* ----- IDLE (default) ----- */
+.mic-btn:not(.listening):not(.translating):not(:disabled) {
+    background: #333333;
 }
 
-.speak-btn:disabled .btn-circle {
-    background: #444;
-    box-shadow: none;
-    transform: none;
-}
-
-/* Listening state (pulsing glow) */
-.speak-btn.listening .btn-circle {
+/* ----- LISTENING (active) ----- */
+.mic-btn.listening {
+    background: #e0584d;
     animation: pulse-circle 0.8s ease-in-out infinite;
-    box-shadow: 0 0 50px rgba(255, 0, 0, 0.6),
-                inset 0 -4px 10px rgba(0, 0, 0, 0.3),
-                inset 0 4px 10px rgba(255, 255, 255, 0.2);
 }
 
+/* ----- TRANSLATING ----- */
+.mic-btn.translating {
+    background: #ffaa00;
+    animation: pulse-circle-yellow 0.6s ease-in-out infinite;
+}
+
+/* ----- DISABLED (greyed out) ----- */
+.mic-btn:disabled {
+    background: #555555 !important;
+    cursor: not-allowed;
+    animation: none !important;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.mic-btn:disabled .mic-icon {
+    filter: grayscale(1) brightness(0.7);
+}
+
+/* ----- Active state animations ----- */
 @keyframes pulse-circle {
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(1);
-        box-shadow: 0 0 50px rgba(255, 0, 0, 0.6);
+        box-shadow: 0 0 0 0 rgba(224, 88, 77, 0.4);
     }
     50% {
         transform: scale(1.05);
-        box-shadow: 0 0 80px rgba(255, 0, 0, 0.8);
+        box-shadow: 0 0 0 16px rgba(224, 88, 77, 0);
     }
-}
-
-/* Translating state (yellow glow) */
-.speak-btn.translating .btn-circle {
-    animation: pulse-circle-yellow 0.6s ease-in-out infinite;
-    background: radial-gradient(circle at 30% 30%, #ffcc44, #cc8800);
-    box-shadow: 0 0 50px rgba(255, 170, 0, 0.5);
 }
 
 @keyframes pulse-circle-yellow {
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(1);
-        box-shadow: 0 0 50px rgba(255, 170, 0, 0.5);
+        box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.4);
     }
     50% {
         transform: scale(1.05);
-        box-shadow: 0 0 80px rgba(255, 170, 0, 0.7);
+        box-shadow: 0 0 0 16px rgba(255, 170, 0, 0);
     }
 }
 
 /* ================================================================ */
-/* STATUS INDICATOR (tiny dot)                                     */
+/* STATUS INDICATOR                                                */
 /* ================================================================ */
 .status-indicator {
     display: flex;
@@ -262,38 +262,39 @@ body {
 }
 
 .status-dot {
-    width: 8px;
-    height: 8px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     display: inline-block;
     transition: background 0.3s, box-shadow 0.3s;
-}
-
-.status-ready .status-dot {
     background: #44ff88;
     box-shadow: 0 0 8px rgba(68, 255, 136, 0.3);
 }
 
-.status-listening .status-dot {
-    background: #ff4444;
-    box-shadow: 0 0 15px rgba(255, 68, 68, 0.5);
+.status-dot.ready {
+    background: #44ff88;
+    box-shadow: 0 0 8px rgba(68, 255, 136, 0.3);
+}
+
+.status-dot.listening {
+    background: #e0584d;
+    box-shadow: 0 0 15px rgba(224, 88, 77, 0.5);
     animation: pulse-dot 0.8s ease-in-out infinite;
 }
 
-.status-translating .status-dot {
+.status-dot.translating {
     background: #ffaa00;
     box-shadow: 0 0 12px rgba(255, 170, 0, 0.4);
     animation: pulse-dot 0.6s ease-in-out infinite;
 }
 
-.status-disabled .status-dot {
-    background: #555;
+.status-dot.disabled {
+    background: #999999;
     box-shadow: none;
 }
 
 @keyframes pulse-dot {
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(1);
         opacity: 1;
     }
@@ -304,106 +305,14 @@ body {
 }
 
 /* ================================================================ */
-/* MOBILE ROTATION: Top half upside down                          */
-/* ================================================================ */
-@media (max-width: 1023px) {
-    /* Rotate the wrapper */
-    .top-half .rotation-wrapper {
-        transform: rotate(180deg);
-    }
-
-    /* Flip EVERY child back */
-    .top-half .rotation-wrapper *,
-    .top-half .rotation-wrapper .language-select,
-    .top-half .rotation-wrapper .translation-text,
-    .top-half .rotation-wrapper .speak-btn,
-    .top-half .rotation-wrapper .speak-btn *,
-    .top-half .rotation-wrapper .status-indicator,
-    .top-half .rotation-wrapper .status-dot {
-        transform: rotate(180deg) !important;
-    }
-
-    /* Fix select dropdown options */
-    .top-half .rotation-wrapper select option {
-        transform: rotate(180deg) !important;
-    }
-}
-
-/* ================================================================ */
-/* DESKTOP: Left/Right split                                      */
-/* ================================================================ */
-@media (min-width: 1024px) {
-    body {
-        flex-direction: row !important;
-    }
-
-    .speaker-half {
-        flex: 1;
-        padding: 24px 32px 32px 32px;
-        min-height: 0;
-    }
-
-    .top-half {
-        border-bottom: none;
-        border-right: 2px solid #ff4444;
-    }
-
-    .top-half .rotation-wrapper {
-        transform: none !important;
-    }
-
-    .top-half .rotation-wrapper * {
-        transform: none !important;
-    }
-
-    .bottom-half {
-        border-top: none;
-        border-left: 2px solid #4488ff;
-    }
-
-    .divider {
-        width: 3px;
-        height: auto;
-        background: linear-gradient(180deg, #ff4444, #ff8800, #44ff88, #4488ff);
-    }
-
-    .speak-btn {
-        width: 120px;
-        height: 120px;
-    }
-
-    .translation-text {
-        font-size: 32px;
-    }
-}
-
-/* ================================================================ */
-/* KEYBOARD SHORTCUT HINT (desktop only)                           */
+/* KEYBOARD HINT (desktop only)                                    */
 /* ================================================================ */
 .keyboard-hint {
     display: none;
     font-size: 11px;
-    color: #666;
+    color: #999999;
     text-align: center;
     margin-top: 4px;
-    letter-spacing: 0.5px;
-}
-
-@media (min-width: 1024px) {
-    .keyboard-hint {
-        display: block;
-    }
-}
-
-/* ================================================================ */
-/* KEYBOARD HINT (desktop only)                                     */
-/* ================================================================ */
-.keyboard-hint {
-    display: none;
-    font-size: 11px;
-    color: #555;
-    text-align: center;
-    margin-top: 6px;
     letter-spacing: 0.3px;
     font-weight: 400;
 }
@@ -411,18 +320,426 @@ body {
 .keyboard-hint kbd {
     display: inline-block;
     padding: 2px 8px;
-    background: rgba(255, 255, 255, 0.08);
+    background: #eeeeee;
     border-radius: 4px;
     font-size: 10px;
     font-weight: 600;
-    color: #888;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #666666;
     font-family: inherit;
 }
 
-/* Show on desktop only */
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
     .keyboard-hint {
         display: block;
+    }
+}
+
+
+/* ================================================================ */
+/* CUSTOM DROPDOWN                                                 */
+/* ================================================================ */
+.custom-dropdown {
+    position: relative;
+    min-width: 200px;
+    min-height: 40px;
+}
+
+.dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #333333;
+    color: #fafafa;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    width: 100%;
+    min-height: 40px;
+    transition: all 0.2s ease;
+}
+
+.dropdown-trigger:hover {
+    background: #444444;
+}
+
+.dropdown-trigger .arrow {
+    margin-left: auto;
+    font-size: 10px;
+    opacity: 0.7;
+    transition: transform 0.3s ease;
+}
+
+.dropdown-trigger .arrow.open {
+    transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #333333;
+    border-radius: 12px;
+    padding: 6px 0;
+    margin: 0;
+    list-style: none;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-menu.open {
+    display: block;
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-menu li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fafafa;
+    transition: background 0.15s ease;
+}
+
+.dropdown-menu li:hover {
+    background: #444444;
+}
+
+.dropdown-menu li.active {
+    background: #555555;
+    font-weight: 600;
+}
+
+.dropdown-menu li .flag-image {
+    width: 20px;
+    height: 15px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+/* Scrollbar styling */
+.dropdown-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background: #666666;
+    border-radius: 4px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: #888888;
+}
+
+
+/* ================================================================ */
+/* RESPONSIVE: MOBILE (Top/Bottom)                                 */
+/* ================================================================ */
+@media (max-width: 767px) {
+    body {
+        flex-direction: column-reverse !important;
+    }
+
+    .divider {
+        width: 100%;
+        height: 2px;
+        background: #333333;
+    }
+
+    .speaker-half {
+        padding: 16px;
+        justify-content: center;
+        flex: 1;
+    }
+
+    /* ✅ Speaker 1 (now at top) - NORMAL */
+    .bottom-half {
+        border-bottom: 2px solid #333333;
+        transform: none !important;
+    }
+
+    .bottom-half * {
+        transform: none !important;
+    }
+
+    /* ✅ Speaker 2 (now at bottom) - UPSIDE DOWN */
+    .top-half {
+        transform: rotate(180deg);
+        transform-origin: center;
+    }
+
+    .translation-card {
+        max-width: 100%;
+        min-height: 80px;
+    }
+
+    .translation-text {
+        font-size: 18px;
+    }
+
+    .mic-btn {
+        width: 64px;
+        height: 64px;
+    }
+
+    .mic-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .language-section {
+        margin-bottom: 10px;
+    }
+
+    .translation-card {
+        margin-bottom: 10px;
+        padding: 16px 20px;
+        min-height: 70px;
+    }
+
+    .mic-btn {
+        margin-bottom: 4px;
+    }
+
+    .custom-dropdown {
+        min-width: unset;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .dropdown-trigger {
+        font-size: 13px;
+        padding: 6px 12px;
+        min-height: 36px;
+    }
+
+    .dropdown-menu li {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+
+    .language-pill {
+        min-width: unset;
+        width: 100%;
+        max-width: 280px;
+        min-height: 36px;
+        padding: 4px 10px;
+    }
+
+    .language-pill .language-select {
+        font-size: 13px;
+        min-width: 80px;
+    }
+
+}
+
+@media (max-width: 400px) {
+    .speaker-half {
+        padding: 10px 12px;
+    }
+
+    .translation-card {
+        min-height: 60px;
+        padding: 12px 16px;
+        border-radius: 30px;
+    }
+
+    .translation-text {
+        font-size: 16px;
+    }
+
+    .mic-btn {
+        width: 52px;
+        height: 52px;
+    }
+
+    .mic-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .custom-dropdown {
+        max-width: 220px;
+    }
+
+    .dropdown-trigger {
+        font-size: 12px;
+        padding: 4px 10px;
+        min-height: 32px;
+    }
+
+    .dropdown-menu li {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+
+    .flag-image {
+        width: 16px;
+        height: 12px;
+    }
+
+    .status-dot {
+        width: 4px;
+        height: 4px;
+    }
+
+    .keyboard-hint {
+        font-size: 9px;
+    }
+
+    .divider {
+        height: 1.5px;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .speaker-half {
+        padding: 8px 12px;
+    }
+
+    .translation-card {
+        min-height: 50px;
+        padding: 10px 14px;
+        border-radius: 24px;
+        margin-bottom: 6px;
+    }
+
+    .translation-text {
+        font-size: 14px;
+    }
+
+    .mic-btn {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 4px;
+    }
+
+    .mic-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .language-section {
+        margin-bottom: 4px;
+    }
+
+    .custom-dropdown {
+        max-width: 180px;
+        min-height: 28px;
+    }
+
+    .dropdown-trigger {
+        font-size: 11px;
+        padding: 4px 8px;
+        min-height: 28px;
+        border-radius: 30px;
+    }
+
+    .dropdown-menu li {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+
+    .status-dot {
+        width: 4px;
+        height: 4px;
+    }
+
+    .status-indicator {
+        padding: 2px 0;
+    }
+
+    .keyboard-hint {
+        font-size: 8px;
+        margin-top: 2px;
+    }
+
+    .divider {
+        height: 1.5px;
+    }
+
+    .flag-image {
+        width: 14px;
+        height: 10px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .translation-card {
+        max-width: 450px;
+        min-height: 160px;
+    }
+
+    .translation-text {
+        font-size: 28px;
+    }
+
+    .mic-btn {
+        width: 68px;
+        height: 68px;
+    }
+
+    .mic-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .custom-dropdown {
+        min-width: 260px;
+    }
+
+    .dropdown-trigger {
+        font-size: 16px;
+        padding: 10px 18px;
+        min-height: 48px;
+    }
+
+    .dropdown-menu li {
+        font-size: 16px;
+        padding: 10px 18px;
+    }
+
+    .flag-image {
+        width: 24px;
+        height: 18px;
+    }
+}
+
+/* ================================================================ */
+/* RESPONSIVE: TABLET (Hybrid)                                     */
+/* ================================================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .translation-card {
+        max-width: 280px;
+        min-height: 100px;
+    }
+
+    .mic-btn {
+        width: 72px;
+        height: 72px;
     }
 }

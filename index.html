@@ -9,51 +9,73 @@
 <body>
 
     <!-- ============================================================ -->
-    <!-- TOP HALF: SPEAKER 2 (upside down for mobile)                 -->
+    <!-- SPEAKER 1 (Bottom on mobile, Left on desktop)                -->
     <!-- ============================================================ -->
-    <div id="speaker2" class="speaker-half top-half">
+    <div id="speaker1" class="speaker-half bottom-half">
 
-        <div class="rotation-wrapper">
-
-            <!-- Language Dropdown -->
-            <div class="language-section">
-                <select id="lang2" class="language-select">
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="de">German</option>
-                    <option value="ja">Japanese</option>
-                    <option value="zh">Chinese</option>
-                    <option value="ko">Korean</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="it">Italian</option>
-                    <option value="ru">Russian</option>
-                    <option value="ar">Arabic</option>
-                    <option value="hi">Hindi</option>
-                </select>
+        <!-- Language Selector - CUSTOM DROPDOWN -->
+        <div class="language-section">
+            <div class="custom-dropdown" id="dropdown1">
+                <button class="dropdown-trigger" id="dropdownBtn1">
+                    <img src="images/flags/us.png" alt="English" class="flag-image" />
+                    <span class="selected-text">English</span>
+                    <span class="arrow">▼</span>
+                </button>
+                <ul class="dropdown-menu" id="dropdownMenu1">
+                    <li data-value="en" data-flag="images/flags/us.png" class="active">English</li>
+                    <li data-value="es" data-flag="images/flags/es.png">Spanish</li>
+                    <li data-value="fr" data-flag="images/flags/fr.png">French</li>
+                    <li data-value="de" data-flag="images/flags/de.png">German</li>
+                    <li data-value="ja" data-flag="images/flags/jp.png">Japanese</li>
+                    <li data-value="zh" data-flag="images/flags/cn.png">Chinese</li>
+                    <li data-value="ko" data-flag="images/flags/kr.png">Korean</li>
+                    <li data-value="pt" data-flag="images/flags/pt.png">Portuguese</li>
+                    <li data-value="it" data-flag="images/flags/it.png">Italian</li>
+                    <li data-value="ru" data-flag="images/flags/ru.png">Russian</li>
+                    <li data-value="ar" data-flag="images/flags/sa.png">Arabic</li>
+                    <li data-value="hi" data-flag="images/flags/in.png">Hindi</li>
+                    <li data-value="fil" data-flag="images/flags/ph.png">Filipino</li>
+                    <li data-value="ceb" data-flag="images/flags/ph.png">Cebuano</li>
+                </ul>
             </div>
-
-            <!-- Translation Display (big, centered) -->
-            <div id="translation2" class="translation-display">
-                <span id="translationText2" class="translation-text">Tap 🔴 to speak</span>
-            </div>
-
-            <!-- Spacer to push button down -->
-            <div class="spacer"></div>
-
-            <!-- Speak Button (big red circle) -->
-            <button id="speakBtn2" class="speak-btn">
-                <span class="btn-circle"></span>
-            </button>
-
-            <!-- Status Indicator -->
-            <div id="status2" class="status-indicator status-ready">
-                <span class="status-dot"></span>
-            </div>
-
-            <!-- Keyboard hint (desktop only) -->
-            <div class="keyboard-hint">Press <kbd>Q</kbd> to speak</div>
         </div>
+
+        <!-- ✅ Hidden select for JavaScript (keeps everything working) -->
+        <select id="lang1" style="display: none;">
+            <option value="en" selected>English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="ja">Japanese</option>
+            <option value="zh">Chinese</option>
+            <option value="ko">Korean</option>
+            <option value="pt">Portuguese</option>
+            <option value="it">Italian</option>
+            <option value="ru">Russian</option>
+            <option value="ar">Arabic</option>
+            <option value="hi">Hindi</option>
+            <option value="fil" selected>Filipino</option>
+            <option value="ceb">Cebuano</option>
+        </select>
+
+        <!-- Translation Display -->
+        <div id="translation1" class="translation-card">
+            <span id="translationText1" class="translation-text">Hello</span>
+        </div>
+
+        <!-- Microphone Button -->
+        <button id="speakBtn1" class="mic-btn">
+            <img id="micIcon1" src="images/mic-active.png" alt="Microphone" class="mic-icon" />
+        </button>
+
+        <!-- Status Indicator -->
+        <div id="status1" class="status-indicator">
+            <span class="status-dot"></span>
+        </div>
+
+        <!-- Keyboard hint (desktop) -->
+        <div class="keyboard-hint">Press <kbd>Q</kbd></div>
+
     </div>
 
     <!-- ============================================================ -->
@@ -62,48 +84,72 @@
     <div class="divider"></div>
 
     <!-- ============================================================ -->
-    <!-- BOTTOM HALF: SPEAKER 1                                       -->
+    <!-- SPEAKER 2 (Top on mobile - UPSIDE DOWN, Right on desktop)    -->
     <!-- ============================================================ -->
-    <div id="speaker1" class="speaker-half bottom-half">
+    <div id="speaker2" class="speaker-half top-half">
 
-        <!-- Language Dropdown -->
+        <!-- Language Selector - CUSTOM DROPDOWN -->
         <div class="language-section">
-            <select id="lang1" class="language-select">
-                <option value="en" selected>English</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="de">German</option>
-                <option value="ja">Japanese</option>
-                <option value="zh">Chinese</option>
-                <option value="ko">Korean</option>
-                <option value="pt">Portuguese</option>
-                <option value="it">Italian</option>
-                <option value="ru">Russian</option>
-                <option value="ar">Arabic</option>
-                <option value="hi">Hindi</option>
-            </select>
+            <div class="custom-dropdown" id="dropdown2">
+                <button class="dropdown-trigger" id="dropdownBtn2">
+                    <img src="images/flags/es.png" alt="Spanish" class="flag-image" />
+                    <span class="selected-text">Spanish</span>
+                    <span class="arrow">▼</span>
+                </button>
+                <ul class="dropdown-menu" id="dropdownMenu2">
+                    <li data-value="en" data-flag="images/flags/us.png">English</li>
+                    <li data-value="es" data-flag="images/flags/es.png" class="active">Spanish</li>
+                    <li data-value="fr" data-flag="images/flags/fr.png">French</li>
+                    <li data-value="de" data-flag="images/flags/de.png">German</li>
+                    <li data-value="ja" data-flag="images/flags/jp.png">Japanese</li>
+                    <li data-value="zh" data-flag="images/flags/cn.png">Chinese</li>
+                    <li data-value="ko" data-flag="images/flags/kr.png">Korean</li>
+                    <li data-value="pt" data-flag="images/flags/pt.png">Portuguese</li>
+                    <li data-value="it" data-flag="images/flags/it.png">Italian</li>
+                    <li data-value="ru" data-flag="images/flags/ru.png">Russian</li>
+                    <li data-value="ar" data-flag="images/flags/sa.png">Arabic</li>
+                    <li data-value="hi" data-flag="images/flags/in.png">Hindi</li>
+                    <li data-value="fil" data-flag="images/flags/ph.png">Filipino</li>
+                    <li data-value="ceb" data-flag="images/flags/ph.png">Cebuano</li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Translation Display (big, centered) -->
-        <div id="translation1" class="translation-display">
-            <span id="translationText1" class="translation-text">Tap 🔴 to speak</span>
+        <!-- ✅ Hidden select for JavaScript (keeps everything working) -->
+        <select id="lang2" style="display: none;">
+            <option value="en">English</option>
+            <option value="es" selected>Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="ja">Japanese</option>
+            <option value="zh">Chinese</option>
+            <option value="ko">Korean</option>
+            <option value="pt">Portuguese</option>
+            <option value="it">Italian</option>
+            <option value="ru">Russian</option>
+            <option value="ar">Arabic</option>
+            <option value="hi">Hindi</option>
+            <option value="fil" selected>Filipino</option>
+            <option value="ceb">Cebuano</option>
+        </select>
+
+        <!-- Translation Display -->
+        <div id="translation2" class="translation-card">
+            <span id="translationText2" class="translation-text">Hola</span>
         </div>
 
-        <!-- Spacer -->
-        <div class="spacer"></div>
-
-        <!-- Speak Button (big red circle) -->
-        <button id="speakBtn1" class="speak-btn">
-            <span class="btn-circle"></span>
+        <!-- Microphone Button -->
+        <button id="speakBtn2" class="mic-btn">
+            <img id="micIcon2" src="images/mic-active.png" alt="Microphone" class="mic-icon" />
         </button>
 
         <!-- Status Indicator -->
-        <div id="status1" class="status-indicator status-ready">
+        <div id="status2" class="status-indicator">
             <span class="status-dot"></span>
         </div>
 
-        <!-- Keyboard hint (desktop only) -->
-        <div class="keyboard-hint">Press <kbd>P</kbd> to speak</div>
+        <!-- Keyboard hint (desktop) -->
+        <div class="keyboard-hint">Press <kbd>P</kbd></div>
 
     </div>
 
