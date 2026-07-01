@@ -1,418 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>MICHI — AI Voice Translator</title>
-    <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MICHI — AI Voice Translator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --bg-body:            #ffffff;
+    --bg-gradient:        radial-gradient(circle at 10% 20%, rgba(245, 247, 250, 0.4) 0%, rgba(255, 255, 255, 0) 80%);
+    --neumorph-drop:      0 8px 16px #ecf0f3;
+    --neumorph-inner-1:   inset 18px 18px 30px #d1d9e6;
+    --neumorph-inner-2:   inset -18px -18px 30px #ffffff;
+    --neumorph-box:       var(--neumorph-drop), var(--neumorph-inner-1), var(--neumorph-inner-2);
+    --neumorph-hover-drop:   0 4px 8px #ecf0f3;
+    --neumorph-hover-inner-1: inset 12px 12px 20px #d1d9e6;
+    --neumorph-hover-inner-2: inset -12px -12px 20px #ffffff;
+    --neumorph-hover-box: var(--neumorph-hover-drop), var(--neumorph-hover-inner-1), var(--neumorph-hover-inner-2);
+    --button-bg:          #ffffff;
+    --button-hover-bg:    #ffffff;
+
+    --text-main:   #2d3748;
+    --text-dim:    #718096;
+    --text-muted:  #a0aec0;
+    --accent:      #4a5568;
+}
+
+html, body {
+    min-height: 100%;
+    background: var(--bg-body);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-main);
+}
+
+body {
+    background: var(--bg-body);
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
+}
+
+/* ── Layout ── */
+main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 20px;
+    gap: 24px;
+}
+
+/* ── Hero card ── */
+.hero-card {
+    width: 100%;
+    max-width: 560px;
+    background: var(--button-bg);
+    border: none;
+    border-radius: 40px;
+    padding: 64px 52px 56px;
+    box-shadow: var(--neumorph-box);
+    text-align: center;
+    animation: riseIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes riseIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+    font-size: 11px;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+h1.brand {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: clamp(52px, 10vw, 90px);
+    line-height: 1.0;
+    color: var(--text-main);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.brand-sub {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(18px, 3.5vw, 24px);
+    color: var(--text-dim);
+    font-weight: 600;
+    margin-bottom: 28px;
+}
+
+/* ── Thin rule ── */
+.card-rule {
+    width: 48px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #d1d9e6, #ecf0f3);
+    margin: 0 auto 28px;
+}
+
+.subtitle {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    max-width: 400px;
+    margin: 0 auto 40px;
+    font-weight: 400;
+}
+
+.subtitle strong {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* ── Buttons ── */
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+}
+
+.neumorphic-btn {
+    width: 100%;
+    max-width: 280px;
+    background: var(--button-bg);
+    border: none;
+    border-radius: 40px;
+    padding: 16px 28px;
+    box-shadow: var(--neumorph-box);
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.neumorphic-btn:hover {
+    box-shadow: var(--neumorph-hover-box);
+    transform: scale(0.98);
+}
+
+.neumorphic-btn:active {
+    box-shadow: var(--neumorph-hover-box);
+    transform: scale(0.96);
+}
+
+.btn-primary {
+    color: var(--text-main);
+}
+
+.btn-primary .btn-arrow {
+    font-size: 16px;
+    transition: transform 0.2s ease;
+}
+
+.btn-primary:hover .btn-arrow {
+    transform: translateX(3px);
+}
+
+.btn-secondary {
+    color: var(--text-dim);
+}
+
+/* ── Developers panel ── */
+.dev-panel {
+    width: 100%;
+    max-width: 560px;
+    background: var(--button-bg);
+    border: none;
+    border-radius: 40px;
+    box-shadow: var(--neumorph-box);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0 48px;
+    transition:
+        max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.4s ease,
+        padding 0.45s ease;
+}
+
+.dev-panel.open {
+    max-height: 540px;
+    opacity: 1;
+    padding: 44px 48px;
+}
+
+.dev-panel-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.dev-panel h2 {
+    font-family: 'Caveat', cursive;
+    font-size: 32px;
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.panel-tag {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.panel-rule {
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #d1d9e6, #ecf0f3, transparent);
+    margin-bottom: 24px;
+}
+
+/* ── Dev cards ── */
+.dev-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.dev-card {
+    background: var(--button-bg);
+    border-radius: 24px;
+    padding: 20px 20px;
+    box-shadow: var(--neumorph-box);
+}
+
+.dev-card .dev-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 2px;
+}
+
+.dev-card .dev-handle {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+}
+
+.dev-card a {
+    font-size: 11.5px;
+    color: var(--text-dim);
+    text-decoration: none;
+    word-break: break-all;
+    transition: color 0.2s;
+}
+
+.dev-card a:hover { color: var(--text-main); }
+
+.dev-note {
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    padding-top: 20px;
+    border-top: 2px solid #ecf0f3;
+}
+
+/* ── Footer ── */
+.footer {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    padding-bottom: 24px;
+    text-align: center;
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+    .hero-card { padding: 48px 28px 44px; border-radius: 28px; }
+    .dev-panel.open { padding: 36px 28px; }
+    .dev-grid { grid-template-columns: 1fr; }
+    .neumorphic-btn { max-width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-card { animation: none; }
+    * { transition: none !important; }
+}
+</style>
 </head>
 <body>
 
-    <!-- ============================================================ -->
-    <!-- SPEAKER 1 (Bottom on mobile, Left on desktop)                -->
-    <!-- ============================================================ -->
-    <div id="speaker1" class="speaker-half bottom-half">
+<main>
+    <div class="hero-card">
+        <div class="eyebrow">AI · Voice · Real-Time</div>
 
-        <!-- Language Selector - CUSTOM DROPDOWN -->
-        <div class="language-section">
-            <div class="custom-dropdown" id="dropdown1">
-                <button class="dropdown-trigger" id="dropdownBtn1">
-                    <img src="https://flagcdn.com/w40/us.png" alt="English" class="flag-image" />
-                    <span class="selected-text">English</span>
-                    <span class="arrow">▼</span>
-                </button>
-                <ul class="dropdown-menu" id="dropdownMenu1">
-                    <li data-value="en"    data-flag="https://flagcdn.com/w40/us.png" class="active">English</li>
-                    <li data-value="es"    data-flag="https://flagcdn.com/w40/es.png">Spanish</li>
-                    <li data-value="fr"    data-flag="https://flagcdn.com/w40/fr.png">French</li>
-                    <li data-value="de"    data-flag="https://flagcdn.com/w40/de.png">German</li>
-                    <li data-value="it"    data-flag="https://flagcdn.com/w40/it.png">Italian</li>
-                    <li data-value="pt"    data-flag="https://flagcdn.com/w40/pt.png">Portuguese</li>
-                    <li data-value="pt-BR" data-flag="https://flagcdn.com/w40/br.png">Portuguese (Brazilian)</li>
-                    <li data-value="nl"    data-flag="https://flagcdn.com/w40/nl.png">Dutch</li>
-                    <li data-value="pl"    data-flag="https://flagcdn.com/w40/pl.png">Polish</li>
-                    <li data-value="sv"    data-flag="https://flagcdn.com/w40/se.png">Swedish</li>
-                    <li data-value="no"    data-flag="https://flagcdn.com/w40/no.png">Norwegian</li>
-                    <li data-value="da"    data-flag="https://flagcdn.com/w40/dk.png">Danish</li>
-                    <li data-value="fi"    data-flag="https://flagcdn.com/w40/fi.png">Finnish</li>
-                    <li data-value="is"    data-flag="https://flagcdn.com/w40/is.png">Icelandic</li>
-                    <li data-value="ro"    data-flag="https://flagcdn.com/w40/ro.png">Romanian</li>
-                    <li data-value="hu"    data-flag="https://flagcdn.com/w40/hu.png">Hungarian</li>
-                    <li data-value="cs"    data-flag="https://flagcdn.com/w40/cz.png">Czech</li>
-                    <li data-value="sk"    data-flag="https://flagcdn.com/w40/sk.png">Slovak</li>
-                    <li data-value="hr"    data-flag="https://flagcdn.com/w40/hr.png">Croatian</li>
-                    <li data-value="bs"    data-flag="https://flagcdn.com/w40/ba.png">Bosnian</li>
-                    <li data-value="sr"    data-flag="https://flagcdn.com/w40/rs.png">Serbian</li>
-                    <li data-value="sl"    data-flag="https://flagcdn.com/w40/si.png">Slovenian</li>
-                    <li data-value="bg"    data-flag="https://flagcdn.com/w40/bg.png">Bulgarian</li>
-                    <li data-value="mk"    data-flag="https://flagcdn.com/w40/mk.png">Macedonian</li>
-                    <li data-value="sq"    data-flag="https://flagcdn.com/w40/al.png">Albanian</li>
-                    <li data-value="el"    data-flag="https://flagcdn.com/w40/gr.png">Greek</li>
-                    <li data-value="ru"    data-flag="https://flagcdn.com/w40/ru.png">Russian</li>
-                    <li data-value="uk"    data-flag="https://flagcdn.com/w40/ua.png">Ukrainian</li>
-                    <li data-value="lt"    data-flag="https://flagcdn.com/w40/lt.png">Lithuanian</li>
-                    <li data-value="lv"    data-flag="https://flagcdn.com/w40/lv.png">Latvian</li>
-                    <li data-value="et"    data-flag="https://flagcdn.com/w40/ee.png">Estonian</li>
-                    <li data-value="ca"    data-flag="https://flagcdn.com/w40/es.png">Catalan</li>
-                    <li data-value="gl"    data-flag="https://flagcdn.com/w40/es.png">Galician</li>
-                    <li data-value="eu"    data-flag="https://flagcdn.com/w40/es.png">Basque</li>
-                    <li data-value="cy"    data-flag="https://flagcdn.com/w40/gb.png">Welsh</li>
-                    <li data-value="ga"    data-flag="https://flagcdn.com/w40/ie.png">Irish</li>
-                    <li data-value="mt"    data-flag="https://flagcdn.com/w40/mt.png">Maltese</li>
-                    <li data-value="lb"    data-flag="https://flagcdn.com/w40/lu.png">Luxembourgish</li>
-                    <li data-value="ar"    data-flag="https://flagcdn.com/w40/sa.png">Arabic</li>
-                    <li data-value="he"    data-flag="https://flagcdn.com/w40/il.png">Hebrew</li>
-                    <li data-value="fa"    data-flag="https://flagcdn.com/w40/ir.png">Persian (Farsi)</li>
-                    <li data-value="tr"    data-flag="https://flagcdn.com/w40/tr.png">Turkish</li>
-                    <li data-value="az"    data-flag="https://flagcdn.com/w40/az.png">Azerbaijani</li>
-                    <li data-value="hy"    data-flag="https://flagcdn.com/w40/am.png">Armenian</li>
-                    <li data-value="ka"    data-flag="https://flagcdn.com/w40/ge.png">Georgian</li>
-                    <li data-value="kk"    data-flag="https://flagcdn.com/w40/kz.png">Kazakh</li>
-                    <li data-value="uz"    data-flag="https://flagcdn.com/w40/uz.png">Uzbek</li>
-                    <li data-value="mn"    data-flag="https://flagcdn.com/w40/mn.png">Mongolian</li>
-                    <li data-value="hi"    data-flag="https://flagcdn.com/w40/in.png">Hindi</li>
-                    <li data-value="bn"    data-flag="https://flagcdn.com/w40/bd.png">Bengali</li>
-                    <li data-value="ur"    data-flag="https://flagcdn.com/w40/pk.png">Urdu</li>
-                    <li data-value="pa"    data-flag="https://flagcdn.com/w40/in.png">Punjabi</li>
-                    <li data-value="gu"    data-flag="https://flagcdn.com/w40/in.png">Gujarati</li>
-                    <li data-value="mr"    data-flag="https://flagcdn.com/w40/in.png">Marathi</li>
-                    <li data-value="ta"    data-flag="https://flagcdn.com/w40/in.png">Tamil</li>
-                    <li data-value="te"    data-flag="https://flagcdn.com/w40/in.png">Telugu</li>
-                    <li data-value="kn"    data-flag="https://flagcdn.com/w40/in.png">Kannada</li>
-                    <li data-value="ml"    data-flag="https://flagcdn.com/w40/in.png">Malayalam</li>
-                    <li data-value="si"    data-flag="https://flagcdn.com/w40/lk.png">Sinhala</li>
-                    <li data-value="ne"    data-flag="https://flagcdn.com/w40/np.png">Nepali</li>
-                    <li data-value="zh"    data-flag="https://flagcdn.com/w40/cn.png">Chinese (Simplified)</li>
-                    <li data-value="zh-TW" data-flag="https://flagcdn.com/w40/tw.png">Chinese (Traditional)</li>
-                    <li data-value="ja"    data-flag="https://flagcdn.com/w40/jp.png">Japanese</li>
-                    <li data-value="ko"    data-flag="https://flagcdn.com/w40/kr.png">Korean</li>
-                    <li data-value="vi"    data-flag="https://flagcdn.com/w40/vn.png">Vietnamese</li>
-                    <li data-value="th"    data-flag="https://flagcdn.com/w40/th.png">Thai</li>
-                    <li data-value="id"    data-flag="https://flagcdn.com/w40/id.png">Indonesian</li>
-                    <li data-value="ms"    data-flag="https://flagcdn.com/w40/my.png">Malay</li>
-                    <li data-value="fil"   data-flag="https://flagcdn.com/w40/ph.png">Filipino</li>
-                    <li data-value="my"    data-flag="https://flagcdn.com/w40/mm.png">Burmese</li>
-                    <li data-value="km"    data-flag="https://flagcdn.com/w40/kh.png">Khmer</li>
-                    <li data-value="lo"    data-flag="https://flagcdn.com/w40/la.png">Lao</li>
-                    <li data-value="sw"    data-flag="https://flagcdn.com/w40/ke.png">Swahili</li>
-                    <li data-value="am"    data-flag="https://flagcdn.com/w40/et.png">Amharic</li>
-                    <li data-value="ha"    data-flag="https://flagcdn.com/w40/ng.png">Hausa</li>
-                    <li data-value="yo"    data-flag="https://flagcdn.com/w40/ng.png">Yoruba</li>
-                    <li data-value="ig"    data-flag="https://flagcdn.com/w40/ng.png">Igbo</li>
-                    <li data-value="zu"    data-flag="https://flagcdn.com/w40/za.png">Zulu</li>
-                    <li data-value="af"    data-flag="https://flagcdn.com/w40/za.png">Afrikaans</li>
-                </ul>
+        <h1 class="brand">Welcome to</h1>
+        <div class="brand-sub">MICHI</div>
+        <div class="card-rule"></div>
+
+        <p class="subtitle">
+            MICHI is a real-time AI voice translator made by two friends —
+            <strong>jhames001</strong> and <strong>chzn</strong> —
+            during their summer break. Completely free and powered by AI.
+        </p>
+
+        <div class="actions">
+            <button class="neumorphic-btn btn-primary" onclick="window.location.href='app.html'">
+                Translate Now <span class="btn-arrow">→</span>
+            </button>
+            <button class="neumorphic-btn btn-secondary" id="devToggle">
+                Developers Info
+            </button>
+        </div>
+    </div>
+
+    <div class="dev-panel" id="devPanel">
+        <div class="dev-panel-header">
+            <h2>The Developers</h2>
+            <span class="panel-tag">Sophomore · 19</span>
+        </div>
+        <div class="panel-rule"></div>
+
+        <div class="dev-grid">
+            <div class="dev-card">
+                <div class="dev-name">Jhames</div>
+                <div class="dev-handle">jhames001</div>
+                <a href="mailto:jhamesgequinto@gmail.com">jhamesgequinto@gmail.com</a>
+            </div>
+            <div class="dev-card">
+                <div class="dev-name">Chzn</div>
+                <div class="dev-handle">chzn-ichi</div>
+                <a href="mailto:awiten.chosengrace@gmail.com">awiten.chosengrace@gmail.com</a>
             </div>
         </div>
 
-        <!-- Hidden select for JavaScript -->
-        <select id="lang1" style="display: none;">
-            <option value="en" selected>English</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-            <option value="de">German</option>
-            <option value="it">Italian</option>
-            <option value="pt">Portuguese</option>
-            <option value="pt-BR">Portuguese (Brazilian)</option>
-            <option value="nl">Dutch</option>
-            <option value="pl">Polish</option>
-            <option value="sv">Swedish</option>
-            <option value="no">Norwegian</option>
-            <option value="da">Danish</option>
-            <option value="fi">Finnish</option>
-            <option value="is">Icelandic</option>
-            <option value="ro">Romanian</option>
-            <option value="hu">Hungarian</option>
-            <option value="cs">Czech</option>
-            <option value="sk">Slovak</option>
-            <option value="hr">Croatian</option>
-            <option value="bs">Bosnian</option>
-            <option value="sr">Serbian</option>
-            <option value="sl">Slovenian</option>
-            <option value="bg">Bulgarian</option>
-            <option value="mk">Macedonian</option>
-            <option value="sq">Albanian</option>
-            <option value="el">Greek</option>
-            <option value="ru">Russian</option>
-            <option value="uk">Ukrainian</option>
-            <option value="lt">Lithuanian</option>
-            <option value="lv">Latvian</option>
-            <option value="et">Estonian</option>
-            <option value="ca">Catalan</option>
-            <option value="gl">Galician</option>
-            <option value="eu">Basque</option>
-            <option value="cy">Welsh</option>
-            <option value="ga">Irish</option>
-            <option value="mt">Maltese</option>
-            <option value="lb">Luxembourgish</option>
-            <option value="ar">Arabic</option>
-            <option value="he">Hebrew</option>
-            <option value="fa">Persian (Farsi)</option>
-            <option value="tr">Turkish</option>
-            <option value="az">Azerbaijani</option>
-            <option value="hy">Armenian</option>
-            <option value="ka">Georgian</option>
-            <option value="kk">Kazakh</option>
-            <option value="uz">Uzbek</option>
-            <option value="mn">Mongolian</option>
-            <option value="hi">Hindi</option>
-            <option value="bn">Bengali</option>
-            <option value="ur">Urdu</option>
-            <option value="pa">Punjabi</option>
-            <option value="gu">Gujarati</option>
-            <option value="mr">Marathi</option>
-            <option value="ta">Tamil</option>
-            <option value="te">Telugu</option>
-            <option value="kn">Kannada</option>
-            <option value="ml">Malayalam</option>
-            <option value="si">Sinhala</option>
-            <option value="ne">Nepali</option>
-            <option value="zh">Chinese (Simplified)</option>
-            <option value="zh-TW">Chinese (Traditional)</option>
-            <option value="ja">Japanese</option>
-            <option value="ko">Korean</option>
-            <option value="vi">Vietnamese</option>
-            <option value="th">Thai</option>
-            <option value="id">Indonesian</option>
-            <option value="ms">Malay</option>
-            <option value="fil">Filipino</option>
-            <option value="my">Burmese</option>
-            <option value="km">Khmer</option>
-            <option value="lo">Lao</option>
-            <option value="sw">Swahili</option>
-            <option value="am">Amharic</option>
-            <option value="ha">Hausa</option>
-            <option value="yo">Yoruba</option>
-            <option value="ig">Igbo</option>
-            <option value="zu">Zulu</option>
-            <option value="af">Afrikaans</option>
-        </select>
-
-        <!-- Translation Display -->
-        <div id="translation1" class="translation-card">
-            <span id="translationText1" class="translation-text">Hello</span>
-        </div>
-
-        <!-- Microphone Button -->
-        <button id="speakBtn1" class="mic-btn">
-            <img id="micIcon1" src="images/mic-active.png" alt="Microphone" class="mic-icon" />
-        </button>
-
-        <!-- Status Indicator -->
-        <div id="status1" class="status-indicator">
-            <span class="status-dot"></span>
-        </div>
-
-        <!-- Keyboard hint (desktop) -->
-        <div class="keyboard-hint">Press <kbd>Q</kbd></div>
-
+        <p class="dev-note">
+            Built in a week during their summer break, sophomore year. This is their first step into building real-world tools — exploring AI integration and making things that actually work.
+        </p>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- DIVIDER                                                       -->
-    <!-- ============================================================ -->
-    <div class="divider"></div>
+    <div class="footer">What began as a summer break turned into something real. &nbsp;·&nbsp; MICHI 2025</div>
+</main>
 
-    <!-- ============================================================ -->
-    <!-- SPEAKER 2 (Top on mobile - UPSIDE DOWN, Right on desktop)    -->
-    <!-- ============================================================ -->
-    <div id="speaker2" class="speaker-half top-half">
+<script>
+    const toggle = document.getElementById('devToggle');
+    const panel  = document.getElementById('devPanel');
 
-        <!-- Language Selector - CUSTOM DROPDOWN -->
-        <div class="language-section">
-            <div class="custom-dropdown" id="dropdown2">
-                <button class="dropdown-trigger" id="dropdownBtn2">
-                    <img src="https://flagcdn.com/w40/es.png" alt="Spanish" class="flag-image" />
-                    <span class="selected-text">Spanish</span>
-                    <span class="arrow">▼</span>
-                </button>
-                <ul class="dropdown-menu" id="dropdownMenu2">
-                    <li data-value="en"    data-flag="https://flagcdn.com/w40/us.png">English</li>
-                    <li data-value="es"    data-flag="https://flagcdn.com/w40/es.png" class="active">Spanish</li>
-                    <li data-value="fr"    data-flag="https://flagcdn.com/w40/fr.png">French</li>
-                    <li data-value="de"    data-flag="https://flagcdn.com/w40/de.png">German</li>
-                    <li data-value="it"    data-flag="https://flagcdn.com/w40/it.png">Italian</li>
-                    <li data-value="pt"    data-flag="https://flagcdn.com/w40/pt.png">Portuguese</li>
-                    <li data-value="pt-BR" data-flag="https://flagcdn.com/w40/br.png">Portuguese (Brazilian)</li>
-                    <li data-value="nl"    data-flag="https://flagcdn.com/w40/nl.png">Dutch</li>
-                    <li data-value="pl"    data-flag="https://flagcdn.com/w40/pl.png">Polish</li>
-                    <li data-value="sv"    data-flag="https://flagcdn.com/w40/se.png">Swedish</li>
-                    <li data-value="no"    data-flag="https://flagcdn.com/w40/no.png">Norwegian</li>
-                    <li data-value="da"    data-flag="https://flagcdn.com/w40/dk.png">Danish</li>
-                    <li data-value="fi"    data-flag="https://flagcdn.com/w40/fi.png">Finnish</li>
-                    <li data-value="is"    data-flag="https://flagcdn.com/w40/is.png">Icelandic</li>
-                    <li data-value="ro"    data-flag="https://flagcdn.com/w40/ro.png">Romanian</li>
-                    <li data-value="hu"    data-flag="https://flagcdn.com/w40/hu.png">Hungarian</li>
-                    <li data-value="cs"    data-flag="https://flagcdn.com/w40/cz.png">Czech</li>
-                    <li data-value="sk"    data-flag="https://flagcdn.com/w40/sk.png">Slovak</li>
-                    <li data-value="hr"    data-flag="https://flagcdn.com/w40/hr.png">Croatian</li>
-                    <li data-value="bs"    data-flag="https://flagcdn.com/w40/ba.png">Bosnian</li>
-                    <li data-value="sr"    data-flag="https://flagcdn.com/w40/rs.png">Serbian</li>
-                    <li data-value="sl"    data-flag="https://flagcdn.com/w40/si.png">Slovenian</li>
-                    <li data-value="bg"    data-flag="https://flagcdn.com/w40/bg.png">Bulgarian</li>
-                    <li data-value="mk"    data-flag="https://flagcdn.com/w40/mk.png">Macedonian</li>
-                    <li data-value="sq"    data-flag="https://flagcdn.com/w40/al.png">Albanian</li>
-                    <li data-value="el"    data-flag="https://flagcdn.com/w40/gr.png">Greek</li>
-                    <li data-value="ru"    data-flag="https://flagcdn.com/w40/ru.png">Russian</li>
-                    <li data-value="uk"    data-flag="https://flagcdn.com/w40/ua.png">Ukrainian</li>
-                    <li data-value="lt"    data-flag="https://flagcdn.com/w40/lt.png">Lithuanian</li>
-                    <li data-value="lv"    data-flag="https://flagcdn.com/w40/lv.png">Latvian</li>
-                    <li data-value="et"    data-flag="https://flagcdn.com/w40/ee.png">Estonian</li>
-                    <li data-value="ca"    data-flag="https://flagcdn.com/w40/es.png">Catalan</li>
-                    <li data-value="gl"    data-flag="https://flagcdn.com/w40/es.png">Galician</li>
-                    <li data-value="eu"    data-flag="https://flagcdn.com/w40/es.png">Basque</li>
-                    <li data-value="cy"    data-flag="https://flagcdn.com/w40/gb.png">Welsh</li>
-                    <li data-value="ga"    data-flag="https://flagcdn.com/w40/ie.png">Irish</li>
-                    <li data-value="mt"    data-flag="https://flagcdn.com/w40/mt.png">Maltese</li>
-                    <li data-value="lb"    data-flag="https://flagcdn.com/w40/lu.png">Luxembourgish</li>
-                    <li data-value="ar"    data-flag="https://flagcdn.com/w40/sa.png">Arabic</li>
-                    <li data-value="he"    data-flag="https://flagcdn.com/w40/il.png">Hebrew</li>
-                    <li data-value="fa"    data-flag="https://flagcdn.com/w40/ir.png">Persian (Farsi)</li>
-                    <li data-value="tr"    data-flag="https://flagcdn.com/w40/tr.png">Turkish</li>
-                    <li data-value="az"    data-flag="https://flagcdn.com/w40/az.png">Azerbaijani</li>
-                    <li data-value="hy"    data-flag="https://flagcdn.com/w40/am.png">Armenian</li>
-                    <li data-value="ka"    data-flag="https://flagcdn.com/w40/ge.png">Georgian</li>
-                    <li data-value="kk"    data-flag="https://flagcdn.com/w40/kz.png">Kazakh</li>
-                    <li data-value="uz"    data-flag="https://flagcdn.com/w40/uz.png">Uzbek</li>
-                    <li data-value="mn"    data-flag="https://flagcdn.com/w40/mn.png">Mongolian</li>
-                    <li data-value="hi"    data-flag="https://flagcdn.com/w40/in.png">Hindi</li>
-                    <li data-value="bn"    data-flag="https://flagcdn.com/w40/bd.png">Bengali</li>
-                    <li data-value="ur"    data-flag="https://flagcdn.com/w40/pk.png">Urdu</li>
-                    <li data-value="pa"    data-flag="https://flagcdn.com/w40/in.png">Punjabi</li>
-                    <li data-value="gu"    data-flag="https://flagcdn.com/w40/in.png">Gujarati</li>
-                    <li data-value="mr"    data-flag="https://flagcdn.com/w40/in.png">Marathi</li>
-                    <li data-value="ta"    data-flag="https://flagcdn.com/w40/in.png">Tamil</li>
-                    <li data-value="te"    data-flag="https://flagcdn.com/w40/in.png">Telugu</li>
-                    <li data-value="kn"    data-flag="https://flagcdn.com/w40/in.png">Kannada</li>
-                    <li data-value="ml"    data-flag="https://flagcdn.com/w40/in.png">Malayalam</li>
-                    <li data-value="si"    data-flag="https://flagcdn.com/w40/lk.png">Sinhala</li>
-                    <li data-value="ne"    data-flag="https://flagcdn.com/w40/np.png">Nepali</li>
-                    <li data-value="zh"    data-flag="https://flagcdn.com/w40/cn.png">Chinese (Simplified)</li>
-                    <li data-value="zh-TW" data-flag="https://flagcdn.com/w40/tw.png">Chinese (Traditional)</li>
-                    <li data-value="ja"    data-flag="https://flagcdn.com/w40/jp.png">Japanese</li>
-                    <li data-value="ko"    data-flag="https://flagcdn.com/w40/kr.png">Korean</li>
-                    <li data-value="vi"    data-flag="https://flagcdn.com/w40/vn.png">Vietnamese</li>
-                    <li data-value="th"    data-flag="https://flagcdn.com/w40/th.png">Thai</li>
-                    <li data-value="id"    data-flag="https://flagcdn.com/w40/id.png">Indonesian</li>
-                    <li data-value="ms"    data-flag="https://flagcdn.com/w40/my.png">Malay</li>
-                    <li data-value="fil"   data-flag="https://flagcdn.com/w40/ph.png">Filipino</li>
-                    <li data-value="my"    data-flag="https://flagcdn.com/w40/mm.png">Burmese</li>
-                    <li data-value="km"    data-flag="https://flagcdn.com/w40/kh.png">Khmer</li>
-                    <li data-value="lo"    data-flag="https://flagcdn.com/w40/la.png">Lao</li>
-                    <li data-value="sw"    data-flag="https://flagcdn.com/w40/ke.png">Swahili</li>
-                    <li data-value="am"    data-flag="https://flagcdn.com/w40/et.png">Amharic</li>
-                    <li data-value="ha"    data-flag="https://flagcdn.com/w40/ng.png">Hausa</li>
-                    <li data-value="yo"    data-flag="https://flagcdn.com/w40/ng.png">Yoruba</li>
-                    <li data-value="ig"    data-flag="https://flagcdn.com/w40/ng.png">Igbo</li>
-                    <li data-value="zu"    data-flag="https://flagcdn.com/w40/za.png">Zulu</li>
-                    <li data-value="af"    data-flag="https://flagcdn.com/w40/za.png">Afrikaans</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Hidden select for JavaScript -->
-        <select id="lang2" style="display: none;">
-            <option value="en">English</option>
-            <option value="es" selected>Spanish</option>
-            <option value="fr">French</option>
-            <option value="de">German</option>
-            <option value="it">Italian</option>
-            <option value="pt">Portuguese</option>
-            <option value="pt-BR">Portuguese (Brazilian)</option>
-            <option value="nl">Dutch</option>
-            <option value="pl">Polish</option>
-            <option value="sv">Swedish</option>
-            <option value="no">Norwegian</option>
-            <option value="da">Danish</option>
-            <option value="fi">Finnish</option>
-            <option value="is">Icelandic</option>
-            <option value="ro">Romanian</option>
-            <option value="hu">Hungarian</option>
-            <option value="cs">Czech</option>
-            <option value="sk">Slovak</option>
-            <option value="hr">Croatian</option>
-            <option value="bs">Bosnian</option>
-            <option value="sr">Serbian</option>
-            <option value="sl">Slovenian</option>
-            <option value="bg">Bulgarian</option>
-            <option value="mk">Macedonian</option>
-            <option value="sq">Albanian</option>
-            <option value="el">Greek</option>
-            <option value="ru">Russian</option>
-            <option value="uk">Ukrainian</option>
-            <option value="lt">Lithuanian</option>
-            <option value="lv">Latvian</option>
-            <option value="et">Estonian</option>
-            <option value="ca">Catalan</option>
-            <option value="gl">Galician</option>
-            <option value="eu">Basque</option>
-            <option value="cy">Welsh</option>
-            <option value="ga">Irish</option>
-            <option value="mt">Maltese</option>
-            <option value="lb">Luxembourgish</option>
-            <option value="ar">Arabic</option>
-            <option value="he">Hebrew</option>
-            <option value="fa">Persian (Farsi)</option>
-            <option value="tr">Turkish</option>
-            <option value="az">Azerbaijani</option>
-            <option value="hy">Armenian</option>
-            <option value="ka">Georgian</option>
-            <option value="kk">Kazakh</option>
-            <option value="uz">Uzbek</option>
-            <option value="mn">Mongolian</option>
-            <option value="hi">Hindi</option>
-            <option value="bn">Bengali</option>
-            <option value="ur">Urdu</option>
-            <option value="pa">Punjabi</option>
-            <option value="gu">Gujarati</option>
-            <option value="mr">Marathi</option>
-            <option value="ta">Tamil</option>
-            <option value="te">Telugu</option>
-            <option value="kn">Kannada</option>
-            <option value="ml">Malayalam</option>
-            <option value="si">Sinhala</option>
-            <option value="ne">Nepali</option>
-            <option value="zh">Chinese (Simplified)</option>
-            <option value="zh-TW">Chinese (Traditional)</option>
-            <option value="ja">Japanese</option>
-            <option value="ko">Korean</option>
-            <option value="vi">Vietnamese</option>
-            <option value="th">Thai</option>
-            <option value="id">Indonesian</option>
-            <option value="ms">Malay</option>
-            <option value="fil">Filipino</option>
-            <option value="my">Burmese</option>
-            <option value="km">Khmer</option>
-            <option value="lo">Lao</option>
-            <option value="sw">Swahili</option>
-            <option value="am">Amharic</option>
-            <option value="ha">Hausa</option>
-            <option value="yo">Yoruba</option>
-            <option value="ig">Igbo</option>
-            <option value="zu">Zulu</option>
-            <option value="af">Afrikaans</option>
-        </select>
-
-        <!-- Translation Display -->
-        <div id="translation2" class="translation-card">
-            <span id="translationText2" class="translation-text">Hola</span>
-        </div>
-
-        <!-- Microphone Button -->
-        <button id="speakBtn2" class="mic-btn">
-            <img id="micIcon2" src="images/mic-active.png" alt="Microphone" class="mic-icon" />
-        </button>
-
-        <!-- Status Indicator -->
-        <div id="status2" class="status-indicator">
-            <span class="status-dot"></span>
-        </div>
-
-        <!-- Keyboard hint (desktop) -->
-        <div class="keyboard-hint">Press <kbd>P</kbd></div>
-
-    </div>
-
-    <script src="script.js"></script>
+    toggle.addEventListener('click', () => {
+        const isOpen = panel.classList.toggle('open');
+        toggle.textContent = isOpen ? 'Hide Info' : 'Developers Info';
+    });
+</script>
 </body>
 </html>
