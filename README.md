@@ -1,7 +1,7 @@
 # MICHI — AI Voice Translator
 
 A real-time, two-person AI voice translator built for natural face-to-face conversations.
-Collaborated with **Jhames**, and made possible with **Deepseek** <3.
+Collaborated with **Jhames**
 
 ---
 
